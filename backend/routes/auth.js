@@ -38,7 +38,7 @@ router.get('/google/callback',
       { id: req.user.id, email: req.user.email, name: req.user.name, role: req.user.role, picture: req.user.picture },
       process.env.JWT_SECRET, { expiresIn: '7d' }
     );
-    res.cookie('token', token, { httpOnly:true, secure:false, maxAge:604800000, sameSite:'lax' });
+    res.cookie('token', token, { httpOnly:true, secure:true, maxAge:604800000, sameSite:'none' });
     res.redirect(process.env.FRONTEND_URL + '/');
   }
 );
