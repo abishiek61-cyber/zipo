@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base { body { @apply bg-[#0a0a0f] text-white font-sans; } }
+.slogan-container { height: 52px; overflow: hidden; }
+.slogan-track { animation: sloganSlide 9s infinite; }
+@keyframes sloganSlide {
+  0%,28%   { transform: translateY(0); }
+  33%,61%  { transform: translateY(-52px); }
+  66%,94%  { transform: translateY(-104px); }
+  99%,100% { transform: translateY(0); }
+}
