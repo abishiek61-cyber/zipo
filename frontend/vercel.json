@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/auth/google",
+      "destination": "https://zipo-production.up.railway.app/auth/google",
+      "permanent": false
+    }
+  ]
+}
