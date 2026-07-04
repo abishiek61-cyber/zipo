@@ -2,11 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import axios from 'axios' // 🟢 Import axios
+import axios from 'axios'
 
-// 🟢 Dynamically set the backend URL for EVERY api call in the app
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
-axios.defaults.withCredentials = true; // 🟢 Ensures cookies flow correctly on all calls
+// Hardcoded backend URL to ensure consistent API communication
+axios.defaults.baseURL = 'https://zipo-production.up.railway.app';
+axios.defaults.withCredentials = true;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
