@@ -26,7 +26,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     secure: true,       // Requires HTTPS to protect tracking tokens
-    sameSite: 'none',   // Mandatory for cross-origin domain structures (Vercel to Railway)
+    sameSite: 'lax',   // Mandatory for cross-origin domain structures (Vercel to Railway)
     maxAge: 604800000   // Valid session life for 7 days
   }
 }));
