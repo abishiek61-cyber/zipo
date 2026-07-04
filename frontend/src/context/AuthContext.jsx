@@ -4,7 +4,8 @@ import axios from 'axios'
 const AuthContext = createContext(null)
 
 // Hardcoded API_BASE to bypass corrupted environment variable injection
-const API_BASE = 'https://zipo-production.up.railway.app';
+// const API_BASE = 'https://zipo-production.up.railway.app';
+const API_BASE = '';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
