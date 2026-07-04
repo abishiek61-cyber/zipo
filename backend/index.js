@@ -1,20 +1,43 @@
 require('dotenv').config();
-const express    = require('express');
-const cors       = require('cors');
+const express      = require('express');
+const cors         = require('cors');
 const cookieParser = require('cookie-parser');
-const session    = require('express-session');
-const passport   = require('passport');
+const session      = require('express-session');
+const passport     = require('passport');
 
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+
+// 1. Tell Express to trust Railway's HTTPS proxy layer
+app.set('trust proxy', 1);
+
+// 2. Strict CORS setup ensuring credentials flow properly
+app.use(cors({ 
+  origin: process.env.FRONTEND_URL, 
+  credentials: true 
+}));
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
+
+// 3. Updated Production Session Settings for Cross-Domain Cookies
+app.use(session({ 
+  secret: process.env.SESSION_SECRET, 
+  resave: false, 
+  saveUninitialized: false,
+  cookie: {
+    secure: true,       // Requires HTTPS to protect tracking tokens
+    sameSite: 'none',   // Mandatory for cross-origin domain structures (Vercel to Railway)
+    maxAge: 604800000   // Valid session life for 7 days
+  }
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Request logger
 app.use((req, res, next) => { console.log(req.method, req.path); next(); });
 
+// Routes
 try { app.use('/auth',         require('./routes/auth'));     console.log('✓ auth'); } catch(e) { console.error('✗ auth:', e.message); }
 try { app.use('/api',          require('./routes/packages')); console.log('✓ packages'); } catch(e) { console.error('✗ packages:', e.message); }
 try { app.use('/api/bookings', require('./routes/bookings')); console.log('✓ bookings'); } catch(e) { console.error('✗ bookings:', e.message); }
@@ -22,6 +45,7 @@ try { app.use('/api/payments', require('./routes/payments')); console.log('✓ p
 try { app.use('/api/admin',    require('./routes/admin'));    console.log('✓ admin'); } catch(e) { console.error('✗ admin:', e.message); }
 try { app.use('/api/features', require('./routes/features')); console.log('✓ features'); } catch(e) { console.error('✗ features:', e.message); }
 
+// Global Error Handler
 app.use((err, req, res, next) => { console.error('ERROR:', err.message); res.status(500).json({ error: err.message }); });
 app.get('/health', (req, res) => res.json({ ok: true }));
 
